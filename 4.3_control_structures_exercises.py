@@ -224,16 +224,16 @@ while wants_to_continue.lower() == "y" or wants_to_continue.lower() == "yes":
     grade = int(input("Enter a numerical grade from 0 to 100: "))
 
     # Display the corresponding letter grade.
-    if grade <= 100 and grade >= 88:
-        print(f"{grade} is an A.")
-    elif grade <= 87 and grade >= 80:
-        print(f"{grade} is a B.")
-    elif grade <= 79 and grade >= 67:
-        print(f"{grade} is a C.")
-    elif grade <= 66 and grade >= 60:
-        print(f"{grade} is a D.")
-    elif grade <= 59 and grade >= 0:
+    if grade >= 0 and grade <= 59:
         print(f"{grade} is an F.")
+    elif grade <= 66:
+        print(f"{grade} is a D.")
+    elif grade <= 79:
+        print(f"{grade} is a C.")
+    elif grade <= 87:
+        print(f"{grade} is a B.")
+    elif grade <= 100:
+        print(f"{grade} is an A.")
 
     # Prompt the user to continue.
     # Assume that the user will enter valid integers for the grades.
