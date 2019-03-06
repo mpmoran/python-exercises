@@ -185,7 +185,8 @@ def normalize_name(s):
     # everything should be lowercase
     # spaces should be replaced with underscores
 
-    return s.strip().lower().replace(" ", "_")
+    s = s.strip().lower().replace(" ", "_")
+    return "".join([l for l in s if l.isalnum() or l in " _"])
 
 
 assert normalize_name("Name") == "name"
@@ -196,6 +197,7 @@ assert normalize_name("99 Completed") == "completed"
 assert normalize_name("_Name  ") == "_name"
 assert normalize_name("first_name") == "first_name"
 assert normalize_name("% Completed") == "completed"
+assert normalize_name(" email address@$") == "email_address"
 
 # 11. Write a function named cumsum that accepts a list of numbers and
 # returns a list that is the cumulative sum of the numbers in the list.
