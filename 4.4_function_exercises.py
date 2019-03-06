@@ -17,8 +17,7 @@ assert not is_two("a")
 
 
 def is_vowel(s):
-    vowels = ["a", "e", "i", "o", "u"]
-    return len(s) == 1 and s.lower() in vowels
+    return s.lower() in "aeiou"
 
 
 assert is_vowel("a")
@@ -49,15 +48,14 @@ assert not is_consonant("U")
 
 
 def capitalize_consonant(s):
-    first = s[0]
-    rest = s[1:]
-    return first.upper() + rest if is_consonant(first) else s
+    return s.capitalize() if is_consonant(s[:1]) else s
 
 
 assert capitalize_consonant("shoe") == "Shoe"
 assert capitalize_consonant("baseball") == "Baseball"
 assert capitalize_consonant("apple") == "apple"
 assert capitalize_consonant("igloo") == "igloo"
+assert capitalize_consonant("Baseball") == "Baseball"
 
 # 5. Define a function named calculate_tip. It should accept a
 # tip percentage (a number between 0 and 1) and the bill total, and
@@ -79,7 +77,8 @@ assert calculate_tip(1, 20) == 20
 
 
 def apply_discount(original_price, discount_percentage):
-    return round(original_price * (1 - discount_percentage), 2)
+    discount_amount = original_price * discount_percentage
+    return original_price - discount_amount
 
 
 assert apply_discount(100, 0.5) == 50
@@ -139,39 +138,173 @@ assert get_letter_grade(0) == "F"
 # 9. Define a function named remove_vowels that accepts a string and
 # returns a string with all the vowels removed.
 
+# Recursive solution #1
+# def remove_vowels(s, temp=""):
+#     if not s:
+#         return temp
+#     return remove_vowels(s[1:], temp + s[:1] if not is_vowel(s[:1]) else temp)
+
+
+# Recursive solution #2
+# def remove_vowels(s, acc=""):
+#     if s == "":
+#         return acc
+
+#     first, *rest = s
+#     next = "".join(rest)
+
+#     return remove_vowels(next, acc + first if first not in "aeiou" else acc)
+
 
 def remove_vowels(s):
-    for letter in s:
-        if is_vowel(letter):
-            return remove_vowels(s.replace(letter, ""))
-
-    return s
+    return "".join([char for char in s if not is_vowel(char)])
 
 
 assert remove_vowels("shoe") == "sh"
 assert remove_vowels("test sentence") == "tst sntnc"
 assert remove_vowels("bcdfghjk lmnpqrstvwxyz") == "bcdfghjk lmnpqrstvwxyz"
 assert remove_vowels("ae io u") == "  "
+assert remove_vowels("") == ""
 
 # 10. Define a function named normalize_name. It should accept a string
-# and return a valid python identifier, that is:
-# anything that is not a valid python identifier should be removed
-# leading and trailing whitespace should be removed
-# everything should be lowercase
-# spaces should be replaced with underscores
+# and return a valid python identifier.
 # for example:
 # Name will become name
 # First Name will become first_name
 # % Completed will become completed
+
+
+def normalize_name(s):
+    # anything that is not a valid python identifier should be removed
+    for i in range(len(s)):
+        if s[i].isalpha() or s[i] == "_":
+            s = s[i:]
+            break
+
+    # leading and trailing whitespace should be removed
+    # everything should be lowercase
+    # spaces should be replaced with underscores
+
+    return s.strip().lower().replace(" ", "_")
+
+
+assert normalize_name("Name") == "name"
+assert normalize_name("First Name") == "first_name"
+assert normalize_name("Completed") == "completed"
+assert normalize_name("   First Name   ") == "first_name"
+assert normalize_name("99 Completed") == "completed"
+assert normalize_name("_Name  ") == "_name"
+assert normalize_name("first_name") == "first_name"
+assert normalize_name("% Completed") == "completed"
+
 # 11. Write a function named cumsum that accepts a list of numbers and
 # returns a list that is the cumulative sum of the numbers in the list.
 # cumsum([1, 1, 1]) returns [1, 2, 3]
 # cumsum([1, 2, 3, 4]) returns [1, 3, 6, 10]
+
+
+# Recursive solution #1
+# def cumsum(num_list, sum_list=[]):
+#     if not num_list:
+#         return sum_list
+
+#     first_num = num_list[:1].pop()
+#     last_sum = sum_list[-1] if sum_list else 0
+#     return cumsum(num_list[1:], sum_list + [(first_num + last_sum)])
+
+# Recursive solution #2
+# def cumsum(l, acc=[]):
+#     if len(l) == 0:
+#         return acc
+#     head, *tail = l
+#     return cumsum(tail, acc + [head + acc[-1]] if acc else [head])
+
+
+def cumsum(num_list):
+    return [sum(num_list[: i + 1]) for i in range(len(num_list))]
+
+
+assert cumsum([1, 1, 1]) == [1, 2, 3]
+assert cumsum([1, 2, 3, 4]) == [1, 3, 6, 10]
+assert cumsum([]) == []
+assert cumsum([0]) == [0]
+assert cumsum([5]) == [5]
+
 # Bonus
 # 1. Create a function named twelveto24. It should accept a string in the
-# format 10:45am or 4:30pm and return a string that is the representation of the time in a 24-hour format. Bonus write a function that does the opposite.
+# format 10:45am or 4:30pm and return a string that is the representation of
+# the time in a 24-hour format. Bonus write a function that does the opposite.
+
+
+def twelveto24(time):
+    hour, minute = time[:-2].split(":")
+    period = time[-2:]
+    if "am" == period:
+        return f"0:{minute}" if hour == "12" else f"{hour}:{minute}"
+    elif "pm" == period:
+        if hour == "12":
+            return f"{hour}:{minute}"
+        else:
+            return f"{int(hour) + 12}:{minute}"
+
+
+assert twelveto24("10:45am") == "10:45"
+assert twelveto24("4:30pm") == "16:30"
+assert twelveto24("12:15pm") == "12:15"
+assert twelveto24("12:34am") == "0:34"
+
 # 2. Create a function named col_index. It should accept a spreadsheet column
 # name, and return the index number of the column.
 # col_index('A') returns 1
 # col_index('B') returns 2
 # col_index('AA') returns 27
+
+
+def col_index(column):
+    pass
+
+
+# 3. Write a function named `add`. It should accept two arguments and return
+# the result of adding the two arguments together.
+
+
+def add(n1, n2):
+    return n1 + n2
+
+
+assert add(1, 2) == 3
+assert add(100, 50) == 150
+assert add(-1, 5) == 4
+assert add(-5, -10) == -15
+
+# 4. Write a function named `subtract`. It should accept two arugments and
+# return the result of subtracting the first from the second.
+
+
+def subtract(n1, n2):
+    return add(n1, -n2)
+
+
+assert subtract(4, 1) == 3
+assert subtract(-5, 3) == -8
+assert subtract(-6, -10) == 4
+
+# 5. Write a function named `multiply`. It should accept two numbers and
+# return the result of multiplying them together.
+
+
+# def multiply(n1, n2):
+#     if n2 == 1:
+#         return n1
+#     else:
+# FIXME: this doubles n1 every time
+#         return multiply(add(n1, n1), n2 - 1)
+
+
+# assert multiply(2, 2) == 4
+# assert multiply(10, 5) == 50
+# assert multiply(4, -5) == -20
+# assert multiply(-4, -10) == 40
+
+# Bonus: don't use the `*` operator in your `multiply` function
+# Bonus Bonus: don't use a loop in your `multiply` function
