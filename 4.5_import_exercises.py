@@ -166,7 +166,7 @@ assert avgbalance == 2771.95
 # User with the lowest balance
 
 
-def users_with_balance(users, balance):
+def user_with_balance(users, balance):
     """
     users is a list of dictionaries containing user data
     balance is a string in the format $100.00
@@ -178,12 +178,12 @@ def float_to_currency(amount):
     return f"${amount:,.2f}"
 
 
-usr_min_bal = users_with_balance(profiles, float_to_currency(min(balances)))
+usr_min_bal = user_with_balance(profiles, float_to_currency(min(balances)))
 print("User with the lowest balance:", usr_min_bal)
 assert usr_min_bal == "Avery Flynn"
 
 # User with the highest balance
-usr_max_bal = users_with_balance(profiles, float_to_currency(max(balances)))
+usr_max_bal = user_with_balance(profiles, float_to_currency(max(balances)))
 print("User with the highest balance", usr_max_bal)
 assert usr_max_bal == "Fay Hammond"
 
