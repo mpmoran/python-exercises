@@ -295,18 +295,22 @@ assert subtract(-6, -10) == 4
 # return the result of multiplying them together.
 
 
-# def multiply(n1, n2):
-#     if n2 == 1:
-#         return n1
-#     else:
-# FIXME: this doubles n1 every time
-#         return multiply(add(n1, n1), n2 - 1)
+def multiply(n1, n2):
+    if n2 == 0:
+        return 0
+    else:
+        if n2 > 0:
+            return n1 + multiply(n1, n2 - 1)
+        else:
+            return n1 - multiply(n1, abs(n2) - 1)
 
 
-# assert multiply(2, 2) == 4
-# assert multiply(10, 5) == 50
-# assert multiply(4, -5) == -20
-# assert multiply(-4, -10) == 40
+assert multiply(2, 2) == 4
+assert multiply(10, 5) == 50
+print(multiply(4, -5))
+assert multiply(4, -5) == -20
+assert multiply(-4, -10) == 40
+assert multiply(-6, 7) == -42
 
 # Bonus: don't use the `*` operator in your `multiply` function
 # Bonus Bonus: don't use a loop in your `multiply` function
