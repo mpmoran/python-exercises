@@ -78,3 +78,4 @@ tests/*_tests
 
 # Mine
 cache/
+env.py
